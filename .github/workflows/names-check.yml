@@ -1,0 +1,63 @@
+name: Names Check
+
+# Every helper, feature and action named in the skills' tables must still exist on helpers4.dev.
+# On a PR it guards the edit; weekly it catches a rename or removal upstream and opens an issue.
+on:
+  pull_request:
+    paths:
+      - "plugins/**"
+      - "scripts/check-names.mjs"
+      - ".github/workflows/names-check.yml"
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  manifests:
+    name: Manifests are valid JSON
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Validate JSON
+        run: |
+          for f in .claude-plugin/marketplace.json plugins/*/.claude-plugin/plugin.json scopes.json; do
+            python3 -m json.tool "$f" > /dev/null || { echo "::error file=$f::invalid JSON"; exit 1; }
+          done
+
+  names:
+    name: Names exist on helpers4.dev
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "24"
+      - name: Check names
+        id: check
+        run: node scripts/check-names.mjs 2>&1 | tee names.log
+        continue-on-error: ${{ github.event_name == 'schedule' }}
+      - name: Open an issue when the scheduled check finds drift
+        if: github.event_name == 'schedule' && steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue list --label names-drift --state open --json number -q '.[0].number' > open.txt
+          if [ -s open.txt ]; then
+            gh issue comment "$(cat open.txt)" --body-file names.log
+          else
+            gh issue create --title "Skill tables name things that no longer exist" \
+              --label names-drift --body-file names.log
+          fi
