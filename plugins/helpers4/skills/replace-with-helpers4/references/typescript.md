@@ -42,7 +42,7 @@ for these patterns. Each row is *hand-written code* → *the helper that replace
 | `reduce` that groups into `Record<K, T[]>` | `object/groupBy` |
 | split into two arrays by predicate; nested loops for a cartesian product | `array/partition`, `cartesianProduct` |
 | Fisher-Yates shuffle, random element, `Array.from({ length })` ranges | `array/shuffle`, `sample`, `range` |
-| comparator chains `a.x - b.x \|\| a.y.localeCompare(b.y)`, natural sort | `array/sortBy`, `combineSortFns`, `sortNatural`, `reverseSortFn` |
+| comparator chains `a.x - b.x \|\| a.y.localeCompare(b.y)`, natural sort | `array/createSortByStringFn`, `createSortByNumberFn`, `createSortByDateFn`, `combineSortFns`, `sortStringNaturalAscFn`, `reverseSortFn` |
 | `await Promise.all(arr.map(...))` with a concurrency cap, async `filter`/`forEach` | `array/mapAsync`, `filterAsync`, `forEachAsync`, `mapSettled` |
 | `JSON.parse(JSON.stringify(x))` to clone; a hand-made `deepClone` | `object/cloneDeep` (or `structuredClone` if the platform allows) |
 | a recursive merge; `_.merge` | `object/mergeDeep` |
@@ -68,8 +68,8 @@ for these patterns. Each row is *hand-written code* → *the helper that replace
 | a hand-made mutex or semaphore | `promise/createMutex`, `createSemaphore` |
 | `fetch` + `if (!res.ok) throw` + `res.json()` | `promise/fetchJson`, `fetchOrThrow`, `safeFetch` |
 | pagination loops over `next` cursors | `promise/paginate` |
-| `new Date(x)` validity checks, `isNaN(d.getTime())` | `date/isValid`, `ensureDate`, `validate` |
-| adding days/months, start of day/week, ISO week | `date/add`, `startOf`, `isoWeek`, `weekday` |
+| `new Date(x)` validity checks, `isNaN(d.getTime())` | `date/isValid`, `ensureDate`, `isValidDateString` |
+| adding days/months, start of day/week, ISO week | `date/addDays`, `addMonths`, `addYears`, `startOf`, `isoWeek`, `isWeekend`, `isBusinessDay` |
 | "3 hours ago", `"1h30m"` parsing and formatting | `date/timeAgo`, `formatDuration`, `parseDuration` |
 | `Math.min(Math.max(x, lo), hi)`, linear interpolation, rounding to n decimals | `number/clamp`, `lerp`, `roundTo` |
 | `0.1 + 0.2` fixes, `Intl.NumberFormat` compact wrappers, `1.5 KB` sizes | `number/correctFloat`, `formatCompact`, `formatSize` |
