@@ -1,5 +1,6 @@
 {
   "name": "helpers4",
+  "description": "Claude Code skills for projects that use helpers4: replace hand-written code, devcontainer setup and CI steps with what helpers4 already provides, and audit a GitHub Actions CI",
   "owner": {
     "name": "helpers4",
     "url": "https://helpers4.dev"
