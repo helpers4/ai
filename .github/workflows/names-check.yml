@@ -1,13 +1,10 @@
 name: Names Check
 
 # Every helper, feature and action named in the skills' tables must still exist on helpers4.dev.
-# On a PR it guards the edit; weekly it catches a rename or removal upstream and opens an issue.
+# On every PR it guards the edit; weekly it catches a rename or removal upstream and opens an issue.
 on:
+  # No `paths` filter: the ruleset requires "Required checks passed" on every PR, so it must always run.
   pull_request:
-    paths:
-      - "plugins/**"
-      - "scripts/check-names.mjs"
-      - ".github/workflows/names-check.yml"
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
@@ -60,4 +57,22 @@ jobs:
           else
             gh issue create --title "Skill tables name things that no longer exist" \
               --label names-drift --body-file names.log
+          fi
+
+  # The one check set as required in the branch ruleset (see https://helpers4.dev/guides/ci/).
+  required:
+    name: Required checks passed
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [manifests, names]
+    steps:
+      - name: Fail if any required job failed or was cancelled
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]]; then
+            echo "::error::At least one required job failed."
+            exit 1
+          fi
+          if [[ "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "::error::At least one required job was cancelled."
+            exit 1
           fi
