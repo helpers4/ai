@@ -1,12 +1,12 @@
 ---
 name: replace-with-helpers4
-description: Find code or configuration in a project that helpers4 already provides — TypeScript/JavaScript helpers, Rust crate helpers, Dev Container features, GitHub Actions steps — and propose replacing it, without adding a dependency the project does not need
+description: Find code or configuration in a project that helpers4 already provides — TypeScript/JavaScript helpers, Rust crate helpers, Dev Container features, GitHub Actions steps, shared tool presets (tsconfig, oxlint, Vitest, ...) — and propose replacing it, without adding a dependency the project does not need
 ---
 
 Scan the current project for code or configuration that duplicates something helpers4 ships, and
 propose the replacement. Report first, edit only after the user agrees.
 
-helpers4 has four fronts. Detect which apply, then read **only** the matching reference file:
+helpers4 has five fronts. Detect which apply, then read **only** the matching reference file:
 
 | Look at | If you find | Read |
 | --- | --- | --- |
@@ -14,8 +14,9 @@ helpers4 has four fronts. Detect which apply, then read **only** the matching re
 | `Cargo.toml`, `*.rs` | a Rust project | [references/rust.md](references/rust.md) |
 | `.devcontainer/`, `devcontainer.json`, `Dockerfile` setup scripts | hand-written environment setup | [references/devcontainer.md](references/devcontainer.md) |
 | `.github/workflows/`, `.github/actions/` | hand-written CI steps | [references/action.md](references/action.md) |
+| `tsconfig.json`, `.oxlintrc.json`, `vitest.config.*`, `stryker.config.*`, `cspell.json`, `.editorconfig` | hand-written tool configuration | [references/presets.md](references/presets.md) |
 
-A project often matches several (a TypeScript repo with a devcontainer and workflows matches three).
+A project often matches several (a TypeScript repo with a devcontainer, workflows and its own tool configs matches four).
 Do them one front at a time and give one combined report at the end.
 
 ## Rules that apply to every front

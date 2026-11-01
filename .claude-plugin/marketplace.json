@@ -1,6 +1,6 @@
 {
   "name": "helpers4",
-  "description": "Claude Code skills for projects that use helpers4: replace hand-written code, devcontainer setup and CI steps with what helpers4 already provides, and audit a GitHub Actions CI",
+  "description": "Claude Code skills for projects that use helpers4: replace hand-written code, devcontainer setup, CI steps and tool configuration with what helpers4 already provides, and audit a GitHub Actions CI",
   "owner": {
     "name": "helpers4",
     "url": "https://helpers4.dev"
@@ -9,7 +9,7 @@
     {
       "name": "helpers4",
       "source": "./plugins/helpers4",
-      "description": "Find code, devcontainer setup or CI steps that helpers4 already provides, and audit your GitHub Actions CI against the helpers4 guidelines",
+      "description": "Find code, devcontainer setup, CI steps or tool configuration that helpers4 already provides, and audit your GitHub Actions CI against the helpers4 guidelines",
       "category": "development"
     }
   ]
