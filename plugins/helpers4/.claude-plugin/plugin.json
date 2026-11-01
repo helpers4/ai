@@ -1,6 +1,6 @@
 {
   "name": "helpers4",
-  "description": "Skills for projects that use helpers4: find code, devcontainer setup or CI steps that a helpers4 helper, feature or action already provides (replace-with-helpers4), and audit a GitHub Actions CI against the helpers4 guidelines (ci-guidelines)",
+  "description": "Skills for projects that use helpers4: find code, devcontainer setup, CI steps or tool configuration that a helpers4 helper, feature, action or preset already provides (replace-with-helpers4), and audit a GitHub Actions CI against the helpers4 guidelines (ci-guidelines)",
   "version": "0.1.0",
   "author": {
     "name": "helpers4",
@@ -10,12 +10,13 @@
   "repository": "https://github.com/helpers4/ai",
   "license": "LGPL-3.0-or-later",
   "keywords": [
-    "helpers4",
-    "typescript",
-    "rust",
+    "ci",
     "devcontainer",
     "github-actions",
-    "ci",
-    "refactoring"
+    "helpers4",
+    "presets",
+    "refactoring",
+    "rust",
+    "typescript"
   ]
 }

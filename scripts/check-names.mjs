@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  *
  * Drift check: every helper, feature and action named in the last column of the skills' tables
- * must still exist on helpers4.dev. Exits 1 and prints the missing names otherwise.
+ * must still exist on helpers4.dev (presets: in the exports of @helpers4/presets). Exits 1 and prints the missing names otherwise.
  */
 import { readFileSync } from 'node:fs';
 
@@ -15,6 +15,17 @@ const get = async (url) => {
   const res = await fetch(url);
   return { ok: res.ok, text: res.ok ? await res.text() : '' };
 };
+
+/** Backticked tokens of the last column of every table row, as written. */
+function tokens(file) {
+  const found = new Set();
+  for (const line of readFileSync(new URL(file, REFS), 'utf8').split('\n')) {
+    if (!line.startsWith('|') || /^\|\s*-/.test(line)) continue;
+    const cells = line.split(/(?<!\\)\|/).map((c) => c.trim()).filter(Boolean);
+    for (const [, token] of cells.at(-1).matchAll(/`([^`]+)`/g)) found.add(token);
+  }
+  return [...found];
+}
 
 /** Backticked names of the last column of every table row. */
 function names(file) {
@@ -56,6 +67,24 @@ for (const [file, section] of [
     const slug = name.replaceAll('_', '-');
     const { ok } = await get(`${SITE}/${section}/${slug}/`);
     if (!ok) missing.push(`${file}: ${slug}`);
+  }
+}
+
+// Presets: every file path named must be in the public `exports` of @helpers4/presets.
+{
+  const source = 'https://raw.githubusercontent.com/helpers4/typescript/main/presets/package.json';
+  const { ok, text } = await get(source);
+  if (!ok) {
+    console.error(`cannot fetch ${source}`);
+    process.exit(2);
+  }
+  const exported = Object.keys(JSON.parse(text).exports).map((key) => key.slice(2));
+  const isExported = (path) =>
+    exported.some((key) => key === path || (key.endsWith('/*') && path.startsWith(key.slice(0, -1))));
+  const looksLikePath = /^[a-z][a-z0-9.-]*(\/[a-z0-9.-]+)*$/;
+  for (const token of tokens('presets.md')) {
+    const path = token.replace(/^@helpers4\/presets\//, '');
+    if (looksLikePath.test(path) && !isExported(path)) missing.push(`presets.md: ${path}`);
   }
 }
 

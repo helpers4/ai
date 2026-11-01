@@ -12,7 +12,7 @@ Rust crate, the Dev Container features and the GitHub Actions.
 
 | Skill | What it does |
 | ----- | ------------ |
-| `replace-with-helpers4` | Scans your project for code, devcontainer setup or CI steps that helpers4 already provides, and proposes the replacement. Reports first, edits only after you agree. |
+| `replace-with-helpers4` | Scans your project for code, devcontainer setup, CI steps or tool configuration (tsconfig, oxlint, Vitest, ...) that helpers4 already provides, and proposes the replacement. Reports first, edits only after you agree. |
 | `ci-guidelines` | Audits a GitHub Actions CI against the [helpers4 CI guide](https://helpers4.dev/guides/ci/) and proposes fixes workflow by workflow. |
 
 Contributing a helper to a library is a different job and stays in each library's own repository
@@ -25,7 +25,7 @@ Contributing a helper to a library is a different job and stays in each library'
 plugins/helpers4/                   # the plugin
 ├── .claude-plugin/plugin.json
 └── skills/
-    ├── replace-with-helpers4/      # SKILL.md routes to references/<front>.md
+    ├── replace-with-helpers4/      # SKILL.md routes to references/<front>.md (typescript, rust, devcontainer, action, presets)
     └── ci-guidelines/
 ```
 
