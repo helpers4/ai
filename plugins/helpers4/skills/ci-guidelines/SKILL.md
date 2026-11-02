@@ -3,8 +3,32 @@ name: ci-guidelines
 description: Audit or build a GitHub Actions CI against the helpers4 guidelines — entry points and reusable jobs, one required check, least-privilege permissions, SHA-pinned actions, concurrency, security checks, guarded releases, readable failures — and propose the fixes, workflow by workflow
 ---
 
-Review the CI of the current repository (or write a new one) against the helpers4 CI guidelines.
-Report first, edit only after the user agrees.
+Review the CI of one or several repositories (or write a new one) against the helpers4 CI
+guidelines. Report first, edit only after the user agrees.
+
+## Which repositories
+
+The current directory is not always the whole project. In a multi-repo workspace (an org workspace,
+a VS Code `.code-workspace`, a monorepo of clones) the repositories sit side by side and the session
+starts in only one of them. Decide the scope **before** scanning:
+
+1. **Find the candidates.** Collect git roots from: the current directory's repository; the
+   additional working directories of the session (listed in the environment); the `folders` of a
+   `*.code-workspace` file at the repository root; sibling directories of the current repository
+   that contain a `.git`. Deduplicate by git root and ignore `.claude/worktrees/` checkouts.
+2. **Honour the arguments.** `/helpers4:ci-guidelines all` means every candidate; any other words are
+   repository names (`/helpers4:ci-guidelines typescript website`). With arguments, do not ask.
+3. **Otherwise show the candidates and ask.** One line per repository, with its CI (number of
+   workflows, local actions, whether an aggregator job exists), and let the user answer with
+   numbers, names or `all`. Do not scan before they answer. A single candidate needs no question.
+4. **If you cannot ask** (non-interactive run), scan the current repository only and say which
+   others were left out, so the user can re-run with `all`.
+5. **Skip repositories without CI**: no `.github/workflows/` means nothing to audit, unless the
+   user asked to build one.
+
+Then work **one repository at a time**: its own ecosystem and conventions, its own
+`git status` (say so if it is not clean, and do not mix your changes with the user's), and its own
+section in the report. Never make one change that spans two repositories.
 
 ## 0. Before anything
 
